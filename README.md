@@ -29,7 +29,7 @@ Follow these steps to set up and run the project locally:
 ### 1. Clone the repository
 
 ```bash
-git clone <your_repo_url>
+git clone <https://github.com/RoBiul-Hasan-Jisan/health_insurance_predictor>
 cd health_insurance_predictor
 pip install -r requirements.txt
 pip install pandas numpy scikit-learn xgboost lightgbm streamlit
