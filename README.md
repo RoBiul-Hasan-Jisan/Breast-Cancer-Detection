@@ -1,54 +1,182 @@
-# health_insurance_predictor
-# Predictive Health Insurance Model for Shield Insurance
+# 🛡️ Health Insurance Predictor
 
-## Overview
+## Predictive Health Insurance Model for Shield Insurance
 
-This project develops a predictive model to estimate health insurance premiums based on user factors such as age, BMI, smoker status, number of children, region, and sex. The goal is to help insurance underwriters quickly generate accurate premium quotes using a simple and interactive web application.
+### 📖 Overview  
+This project builds a machine learning-powered web application to predict individual health insurance premiums based on personal attributes such as:
 
----
+- Age  
+- BMI  
+- Smoking status  
+- Number of children  
+- Region  
+- Sex  
 
-## Project Structure
-health_insurance_predictor/
-│
-├── data/
-│ └── insurance.csv #
-│
-├── models/
-│ └── insurance_model.pkl # Trained model bundle (stacking ensemble + scaler  polynomial features)
-│
-├── train_model.py # Script to train and save the model
-│
-├── app.py # Streamlit app for interactive prediction
-│
-└── README.md 
+The goal is to assist insurance underwriters in generating accurate premium quotes quickly and interactively via a simple Streamlit interface.
 
 ---
 
-## Installation
+## 📁 Project Structure
+![image](https://github.com/user-attachments/assets/99c76f45-cef1-493d-aac1-5a5b46a35435)
 
-1. Clone the repository:
-   ```bash
-   git clone <your_repo_url>
-   cd health_insurance_predictor
-   
+
+---
+
+## 💾 Installation
+
+Follow these steps to set up and run the project locally:
+
+### 1. Clone the repository
+
+```bash
+git clone <your_repo_url>
+cd health_insurance_predictor
 pip install -r requirements.txt
 pip install pandas numpy scikit-learn xgboost lightgbm streamlit
+```
+## Model Details
+
+### Model Type
+A stacking ensemble model combining the following regressors:
+
+Random Forest Regressor
+
+XGBoost Regressor
+
+LightGBM Regressor
+
+### Features Used
+age
+
+bmi
+
+smoker
+
+children
+
+region
+
+sex
+
+Also includes polynomial interaction features (degree = 2).
+
+### Data Processing
+Categorical encoding (One-Hot or Label Encoding)
+
+Polynomial feature expansion
+
+Feature scaling with StandardScaler
+
+### Performance
+R² Score: Approximately 0.87–0.88 on test data
+
+Demonstrates strong predictive performance with the current dataset and features
+
+### Limitations
+Achieving R² > 0.97 is currently unrealistic due to:
+
+Limited feature richness
+
+Inherent noise and variability in the dataset
+
+### Suggestions for Improvement
+Include richer medical and personal history features
+
+Apply advanced feature engineering
+
+Experiment with neural networks or hybrid models
+
+# 🛡️ Health Insurance Predictor
+
+## Predictive Health Insurance Model for Shield Insurance
+
+### 📖 Overview  
+This project builds a machine learning-powered web application to predict individual health insurance premiums based on personal attributes such as:
+
+- Age  
+- BMI  
+- Smoking status  
+- Number of children  
+- Region  
+- Sex  
+
+The goal is to assist insurance underwriters in generating accurate premium quotes quickly and interactively via a simple Streamlit interface.
+
+---
+
+## 📁 Project Structure
+
+![alt text](image.png)
+---
+
+## 💾 Installation
+
+Follow these steps to set up and run the project locally:
+
+### 1. Clone the repository
+
+```bash
+git clone <your_repo_url>
+cd health_insurance_predictor
+pip install -r requirements.txt
+pip install pandas numpy scikit-learn xgboost lightgbm streamlit
+```
+## Model Details
+
+### Model Type
+A stacking ensemble model combining the following regressors:
+
+Random Forest Regressor
+
+XGBoost Regressor
+
+LightGBM Regressor
+
+### Features Used
+age
+
+bmi
+
+smoker
+
+children
+
+region
+
+sex
+
+Also includes polynomial interaction features (degree = 2).
+
+### Data Processing
+Categorical encoding (One-Hot or Label Encoding)
+
+Polynomial feature expansion
+
+Feature scaling with StandardScaler
+
+### Performance
+R² Score: Approximately 0.87–0.88 on test data
+
+Demonstrates strong predictive performance with the current dataset and features
+
+### Limitations
+Achieving R² > 0.97 is currently unrealistic due to:
+
+Limited feature richness
+
+Inherent noise and variability in the dataset
+
+### Suggestions for Improvement
+Include richer medical and personal history features
+
+Apply advanced feature engineering
+
+Experiment with neural networks or hybrid models
 
 
-Model Details
-Model Type: Stacking ensemble of Random Forest, XGBoost, and LightGBM regressors.
+##  How to Run the App
+Run the Streamlit app using:
 
-Features Used:
-age, bmi, smoker, children, region, sex
-plus polynomial interaction features (degree 2).
-
-Data Processing:
-Categorical encoding, polynomial feature expansion, feature scaling with StandardScaler.
-
-Performance:
-Typical R² around 0.87-0.88 on test data with current dataset and features.
-
-Limitations
-Achieving >97% R² accuracy with this dataset and features alone is very challenging due to inherent data noise and variability.
-
-Further improvement requires richer data, advanced feature engineering, or more complex models.
+```bash
+streamlit run app.py
+```
