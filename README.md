@@ -180,3 +180,6 @@ Run the Streamlit app using:
 ```bash
 streamlit run app.py
 ```
+## Output 
+![image](https://github.com/user-attachments/assets/55ff4fa8-ba01-46ea-8a5e-9fdab80fb0ea)
+
