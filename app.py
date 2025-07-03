@@ -1,49 +1,58 @@
+# app.py
 import streamlit as st
+import pandas as pd
 import numpy as np
-import pickle
-import os
+from model import train_model
+from utils import load_and_validate_csv
 
-st.set_page_config(page_title="Health Insurance Premium Predictor", layout="centered")
+st.set_page_config(page_title="🔬 Breast Cancer Detection", layout="centered")
 
-st.title("🛡️ Shield Insurance Premium Predictor")
+# Main Title and Description
+st.markdown("## 🔬 Breast Cancer Detection App")
+st.markdown("""
+Upload a CSV dataset, train a model, and predict if a tumor is **Malignant (M)** or **Benign (B)**.
+""")
 
-# Load model bundle (model + scaler + poly)
-@st.cache_data
-def load_model():
-    model_path = os.path.join("models", "insurance_model.pkl")
-    with open(model_path, "rb") as f:
-        return pickle.load(f)
+# File Upload
+st.markdown("### 📂 Upload your breast cancer CSV file")
+uploaded_file = st.file_uploader("Upload CSV", type=["csv"], help="Upload Breast Cancer Wisconsin Diagnostic CSV", label_visibility="collapsed")
 
-bundle = load_model()
-model = bundle['model']
-scaler = bundle['scaler']
-poly = bundle['poly']
+if uploaded_file is not None:
+    # Load and validate CSV
+    df, error = load_and_validate_csv(uploaded_file)
 
-# Input fields for user
-age = st.slider("Age", min_value=18, max_value=100, value=30)
-bmi = st.slider("BMI", min_value=10.0, max_value=50.0, value=25.0)
-smoker = st.radio("Smoker", options=["No", "Yes"])
-children = st.slider("Number of Children", min_value=0, max_value=10, value=0)
-region = st.selectbox("Region", options=["northeast", "northwest", "southeast", "southwest"])
-sex = st.radio("Sex", options=["Male", "Female"])
+    if error:
+        st.error(f"❌ File Error: {error}")
+    else:
+        st.success("✅ File successfully loaded and validated!")
+        
+        with st.spinner("Training model..."):
+            model, accuracy, feature_list = train_model(df)
 
-# Encode categorical inputs
-smoker_val = 1 if smoker == "Yes" else 0
-region_map = {"northeast": 0, "northwest": 1, "southeast": 2, "southwest": 3}
-region_val = region_map[region]
-sex_val = 0 if sex == "Male" else 1
+        st.success(f"✅ Model trained with **{accuracy*100:.2f}% accuracy**")
 
-# Prepare input vector
-input_array = np.array([[age, bmi, smoker_val, children, region_val, sex_val]])
+        # Prediction Form
+        st.markdown("### 📋 Enter Patient Features")
 
-# Transform input features
-input_poly = poly.transform(input_array)
-input_scaled = scaler.transform(input_poly)
+        input_data = []
+        for col in feature_list:
+            val = st.slider(
+                label=f"{col.replace('_', ' ').capitalize()}",
+                min_value=float(df[col].min()),
+                max_value=float(df[col].max()),
+                value=float(df[col].mean()),
+                step=0.01
+            )
+            input_data.append(val)
 
-# Predict on button click
-if st.button("Predict Premium"):
-    prediction = model.predict(input_scaled)[0]
-    st.success(f"Estimated Annual Health Insurance Premium: ${prediction:,.2f}")
+        # Predict button
+        if st.button("🔍 Predict Tumor Type"):
+            pred = model.predict(np.array(input_data).reshape(1, -1))[0]
+            result = "🟢 **Benign**" if pred == 1 else "🔴 **Malignant**"
+            st.markdown(f"### 🧪 Prediction Result: {result}")
+else:
+    st.info("📁 Awaiting CSV file upload...")
 
+# Footer
 st.markdown("---")
-st.markdown("Developed by AtliQ AI for Shield Insurance")
+st.markdown("Made with ❤️ by [Your Name]")
